@@ -4,7 +4,7 @@ The `dash-down` module provides tools to convert markdown files into a Dash comp
 
 ## Running the example
 
-Make sure that you have setup poetry[https://python-poetry.org/]. Then run
+Make sure that you have setup [poetry](https://python-poetry.org/). Then run
 
     poetry install
 
