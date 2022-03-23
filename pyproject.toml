@@ -14,10 +14,12 @@ dash-iconify = "^0.1.0"
 dash-labs = "^1.0.3"
 mistune = "^2.0.2"
 mistletoe = "^0.8.2"
-pytest = "^7.1.1"
-coverage = "^6.3.2"
 
 [tool.poetry.dev-dependencies]
+coverage = "^6.3.2"
+pytest = "^7.1.1"
+dash = {extras = ["dev", "testing"], version = "^2.3.0"}
+pytest-cov = "^3.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
