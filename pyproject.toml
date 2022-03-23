@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "dash-extensions-docs"
+name = "dash-down"
 version = "0.0.1"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
