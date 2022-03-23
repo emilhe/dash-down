@@ -1,5 +1,7 @@
 # dash-down
 
+[![Unit tests](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml/badge.svg)](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml)
+
 The `dash-down` module provides tools to convert markdown files into a Dash components.
 
 ## Getting started
