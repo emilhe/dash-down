@@ -14,16 +14,8 @@ to install dependencies.
 
 ## Running the example
 
-Run
-
     poetry run python example.py
-
-to launch the example app. To view it, go to http://127.0.0.1:7899/.
 
 ## Running the tests
 
-Run
-
     poetry run pytest
-
-to launch the tests.
