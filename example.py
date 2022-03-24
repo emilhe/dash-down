@@ -5,4 +5,4 @@ blueprint = md_to_blueprint_dmc('tests/markdown_test.md')
 
 if __name__ == '__main__':
     app = DashProxy(blueprint=blueprint)
-    app.run_server()
+    app.run_server(port=9999)

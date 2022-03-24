@@ -52,4 +52,4 @@ and text on another link
 
 > ApiDoc:dash_extensions.Purify
 
-> DashProxy:test.example_app:app
+> DashProxy:module_name=tests.example_app,app_name=app

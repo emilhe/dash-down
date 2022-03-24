@@ -44,10 +44,8 @@ class DashProxyBlock(CustomBlock):
     def __init__(self, show_code=True):
         self.show_code = show_code
 
-    def render(self, renderer: BaseRenderer, *parts):
+    def render(self, renderer: BaseRenderer, module_name, app_name="app"):
         # Get the app.
-        module_name = parts[0]
-        app_name = parts[1] if len(parts) > 1 else "app"
         module = importlib.import_module(module_name)
         app: DashProxy = getattr(module, app_name)
         # Add prefix.
