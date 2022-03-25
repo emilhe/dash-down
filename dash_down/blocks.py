@@ -1,4 +1,6 @@
 import importlib
+from typing import List
+
 import mistletoe
 
 from dash_extensions.enrich import DashProxy, DashBlueprint, PrefixIdTransform
@@ -41,8 +43,10 @@ class DashProxyBlock(CustomBlock):
     Block used to render Dash apps.
     """
 
-    def __init__(self, custom_renderer = None):
-        self.renderer = self._default_renderer if custom_renderer is None else custom_renderer
+    def __init__(self, renderer = None, code_transform = None, hide_tag="no-show"):
+        self.renderer = self._default_renderer if renderer is None else renderer
+        self.code_transform = self._default_code_transform if code_transform is None else code_transform
+        self.hide_tag = hide_tag
 
     @staticmethod
     def _default_renderer(renderer: BaseRenderer, code, layout):
@@ -52,6 +56,9 @@ class DashProxyBlock(CustomBlock):
             renderer.render_block_code(token),
             layout
         ])
+
+    def _default_code_transform(self, source: List[str]):
+        return [line for line in source if self.hide_tag not in line]
 
     def render(self, renderer: BaseRenderer, module_name, app_name="app"):
         # Get the app.
@@ -67,5 +74,5 @@ class DashProxyBlock(CustomBlock):
         # Extract values for rendering.
         layout = app._layout_value()
         with open(f"{module_name.replace('.', '/')}.py", 'r') as f:
-            code = f.readlines()
-        return self.renderer(renderer, code, layout)
+            source = self._default_code_transform(f.readlines())
+        return self.renderer(renderer, source, layout)

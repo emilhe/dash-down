@@ -5,9 +5,9 @@ from dash_down.blocks import DashProxyBlock
 from dash_down.express import md_to_blueprint_dmc
 
 
-def code_renderer(renderer, code, layout):
+def code_renderer(renderer, source, layout):
     return dmc.Grid([
-        dmc.Col(dmc.Prism("".join(code), language="python"), span=1),
+        dmc.Col(dmc.Prism("".join(source), language="python"), span=1),
         dmc.Col(layout, span=1),
     ], columns=2)
 
