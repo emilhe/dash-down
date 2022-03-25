@@ -1,7 +1,7 @@
 [![Unit tests](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml/badge.svg)](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml)
 [![codecov](https://codecov.io/gh/emilhe/dash-down/branch/main/graph/badge.svg?token=kZXx2N1QGY)](https://codecov.io/gh/emilhe/dash-down)
 
-The `dash-down` module provides tools to convert markdown files into a Dash component tree.
+The `dash-down` module provides tools to convert markdown files into a Plotly Dash application.
 
 ## Getting started
 
