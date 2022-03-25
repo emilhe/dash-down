@@ -16,5 +16,4 @@ blueprint = md_to_blueprint_dmc('resources/custom_code_renderer.md',
                                 custom_blocks=[DashProxyBlock(code_renderer)])
 
 if __name__ == '__main__':
-    app = DashProxy(blueprint=blueprint)
-    app.run_server(port=9999)
+    DashProxy(blueprint=blueprint).run_server(port=9999)
