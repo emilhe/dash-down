@@ -29,14 +29,14 @@ where `BLOCK_NAME` denotes the name of the custom block, while `ARG` is a block 
 
 ### What blocks are bundled?
 
-Currently, the bundles blocks are
+Currently, the bundled blocks are
 
 * **ApiDocBlock** - a block for rendering api documentation for a component
-* **DashProxyBlock** - a block for rendering dash apps including interactivity
+* **DashProxyBlock** - a block for rendering dash apps (including interactivity)
 
 ### How to create custom blocks?
 
-To create a new block, make a subclass of `CustomBlock` and implement the `render` function. Say we want to make a new block that yields plot the `iris` dataset. The code would be along the lines of,
+To create a new block, make a subclass of `CustomBlock` and implement the `render` function. Say we want to make a new block that yields a plot of the `iris` dataset. The code would be along the lines of,
 
 ```
 class GraphBlock(CustomBlock):
@@ -57,7 +57,7 @@ path_to_your_md_file = "..."
 blueprint = md_to_blueprint_dmc(path_to_your_md_file, custom_blocks=[GraphBlock()])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server(port=9999)
+    DashProxy(blueprint=blueprint).run_server()
 ```
 
 A working example is bundled in the repo (see `example_custom_block.py`).
