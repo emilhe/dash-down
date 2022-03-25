@@ -25,7 +25,7 @@ Custom content is rendered via a **block** markdown syntax extension. A block ha
 
 > BLOCK_NAME:ARG,KEY=VALUE
 
-where `BLOCK_NAME` denotes the name of the custom block, while `ARG` is a block argument, and the (`KEY`,`VALUE`) pair denotes a keyword argument. Any number of arguments/keyword arguments can be specified. All arguments are passed to the block `render` function.
+where `BLOCK_NAME` denotes the name of the custom block, while `ARG` is a block argument, and the (`KEY`,`VALUE`) pair denotes a keyword argument. Any number of arguments/keyword arguments can be specified (separated by `,`). All arguments are passed to the block `render` function.
 
 ### What blocks are bundled?
 
