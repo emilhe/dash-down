@@ -11,7 +11,8 @@ class CustomBlock:  # pragma: no cover
     """
     Custom block interface definition.
     """
-    def render(self, renderer: BaseRenderer, inner: str):
+
+    def render(self, renderer: BaseRenderer, *args, **kwargs):
         raise NotImplementedError
 
 
@@ -42,7 +43,7 @@ def bind_custom_blocks(renderer: T, custom_blocks: List[CustomBlock]):
         inner = [renderer.render(child) for child in token.children]
         # Check for custom elements.
         custom_element = _detect_custom_block(inner)
-        if custom_element:
+        if custom_element is not None:
             return custom_element
         # If not found, just return normal block.
         return render_quote_original(token)

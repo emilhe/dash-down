@@ -41,8 +41,17 @@ class DashProxyBlock(CustomBlock):
     Block used to render Dash apps.
     """
 
-    def __init__(self, show_code=True):
-        self.show_code = show_code
+    def __init__(self, custom_renderer = None):
+        self.renderer = self._default_renderer if custom_renderer is None else custom_renderer
+
+    @staticmethod
+    def _default_renderer(renderer: BaseRenderer, code, layout):
+        token = BlockCode(code)
+        token.language = "python"
+        return html.Div([
+            renderer.render_block_code(token),
+            layout
+        ])
 
     def render(self, renderer: BaseRenderer, module_name, app_name="app"):
         # Get the app.
@@ -55,15 +64,8 @@ class DashProxyBlock(CustomBlock):
         # Register on blueprint.
         blueprint: DashBlueprint = renderer.blueprint
         app.blueprint.register_callbacks(blueprint)
-        # Return the layout
+        # Extract values for rendering.
         layout = app._layout_value()
-        if not self.show_code:
-            return layout
-        # Show also the code.
         with open(f"{module_name.replace('.', '/')}.py", 'r') as f:
-            token = BlockCode(f.readlines())
-            token.language = "python"
-        return html.Div([
-            renderer.render_block_code(token),
-            layout
-        ])
+            code = f.readlines()
+        return self.renderer(renderer, code, layout)

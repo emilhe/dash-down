@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dash-down"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"
@@ -14,6 +14,7 @@ dash-iconify = "^0.1.0"
 dash-labs = "^1.0.3"
 mistune = "^2.0.2"
 mistletoe = "^0.8.2"
+pandas = "^1.4.1"
 
 [tool.poetry.dev-dependencies]
 coverage = "^6.3.2"

@@ -11,7 +11,7 @@ def _render_markdown(renderer, md_path: str, custom_blocks=None) -> DashBlueprin
     with open(md_path, 'r') as f:
         with renderer() as r:
             bind_custom_blocks(r, custom_blocks=custom_blocks)
-            blueprint = r.render(Document(f))
+            blueprint = r.render(Document(f), )
     return blueprint
 
 
