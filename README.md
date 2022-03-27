@@ -21,7 +21,7 @@ to install dependencies.
 
 ## Custom content
 
-Custom content is rendered the markdown [directive** syntax extension](https://mistune.readthedocs.io/en/latest/directives.html). A directive has the following syntax,
+Custom content is rendered the markdown [directive syntax extension](https://mistune.readthedocs.io/en/latest/directives.html). A directive has the following syntax,
 
     .. directive-name:: directive value
        :option-key: option value
