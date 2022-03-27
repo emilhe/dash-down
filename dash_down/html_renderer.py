@@ -1,18 +1,15 @@
-from itertools import chain
 from dash_extensions import Purify
 from dash_extensions.enrich import DashBlueprint, html
-from mistletoe import BaseRenderer
-from mistletoe.block_token import HTMLBlock
+from mistune import AstRenderer
 
 
-class DashHtmlRenderer(BaseRenderer):
+class DashHtmlRenderer(AstRenderer):
     """
     Render markdown into Dash HTML components.
     """
 
-    def __init__(self, *extras):
-        super().__init__(*chain([HTMLBlock], extras))
-        self._suppress_ptag_stack = [False]
+    def __init__(self):
+        super().__init__()
         self.h_level_mapping = {
             1: html.H1,
             2: html.H2,
@@ -21,97 +18,94 @@ class DashHtmlRenderer(BaseRenderer):
             5: html.H5,
             6: html.H6
         }
-        self.blueprint = None
+        self.blueprint = DashBlueprint()
 
-    def render_strong(self, token):
-        return html.Strong(self.render_inner(token))
+    def text(self, text):
+        return text
 
-    def render_emphasis(self, token):
-        return html.Em(self.render_inner(token))
+    def link(self, link, children=None, title=None):
+        return html.A(children, title=title, href=link)
 
-    def render_inline_code(self, token):
-        return html.Code(self.render_inner(token))
+    def image(self, src, alt="", title=None):
+        return html.Img(src=src, alt=alt, title=title)
 
-    def render_strikethrough(self, token):
-        return html.Strike(self.render_inner(token))
+    def emphasis(self, text):
+        return html.Em(text)
 
-    def render_image(self, token):
-        if token.title:
-            title = ' title="{}"'.format(token.title)
-        else:
-            title = ''
-        return html.Img(src=token.src, alt=self.render_to_plain(token), title=title)
+    def strong(self, text):
+        return html.Strong(text)
 
-    def render_link(self, token):
-        if token.title:
-            title = ' title="{}"'.format(token.title)
-        else:
-            title = ''
-        inner = self.render_inner(token)
-        return html.A(children=inner, title=title, href=token.target)
+    def codespan(self, text):
+        return html.Code(text)
 
-    def render_escape_sequence(self, token):
-        return self.render_inner(token)
-
-    def render_raw_text(self, token):
-        return token.content
-
-    def render_heading(self, token):
-        inner = self.render_inner(token)
-        return self.h_level_mapping[token.level](inner)
-
-    def render_quote(self, token):
-        self._suppress_ptag_stack.append(False)
-        inner = [self.render(child) for child in token.children]
-        self._suppress_ptag_stack.pop()
-        return html.Blockquote(inner)
-
-    def render_paragraph(self, token):
-        if self._suppress_ptag_stack[-1]:
-            return '{}'.format(self.render_inner(token))
-        return html.P(self.render_inner(token))
-
-    @staticmethod
-    def render_block_code(token):
-        if token.language:
-            class_name = 'language-{}'.format(token.language)
-        else:
-            class_name = ''
-        inner = token.children[0].content
-        return html.Pre(html.Code(inner, className=class_name))
-
-    def render_list(self, token):
-        self._suppress_ptag_stack.append(not token.loose)
-        children = [self.render(child) for child in token.children]
-        self._suppress_ptag_stack.pop()
-        if token.start is None:
-            return html.Ul(children)
-        return html.Ol(children, start=token.start if token.start != 1 else '')
-
-    def render_list_item(self, token):
-        return html.Li([self.render(child) for child in token.children])
-
-    @staticmethod
-    def render_thematic_break(token):
-        return html.Hr()
-
-    @staticmethod
-    def render_line_break(token):
+    def linebreak(self):
         return html.Br()
 
-    @staticmethod
-    def render_html_block(token):
-        return Purify(token.content)
+    def paragraph(self, text):
+        return html.P(text)
 
-    def render_inner(self, token):
-        inner = list(map(self.render, token.children))
-        # Unwrap one-element lists.
-        if isinstance(inner, list) and len(inner) == 1:
-            return inner[0]
-        # Wrap children in a div.
-        return html.Div(inner)
+    def heading(self, children, level):
+        return self.h_level_mapping[level](children)
 
-    def render_document(self, token):
-        self.blueprint = DashBlueprint()
-        self.blueprint.layout = self.render_inner(token)
-        return self.blueprint
+    def newline(self):
+        return ''
+
+    def thematic_break(self):
+        return html.Hr()
+
+    def block_text(self, text):
+        return text
+
+    def block_code(self, children, info=None):
+        class_name = None
+        if info is not None:
+            info = info.strip()
+        if info:
+            lang = info.split(None, 1)[0]
+            class_name = f"language-{lang}"
+        return html.Pre(html.Code(children, className=class_name))
+
+    def block_quote(self, text):
+        return html.Blockquote(text)
+
+    def block_html(self, children):
+        return Purify(children)
+
+    def list(self, children, ordered, level, start=None):
+        if not ordered:
+            return html.Ul(children)
+        return html.Ol(children, start=start)
+
+    def list_item(self, text, level):
+        return html.Li(text)
+
+    def finalize(self, data):
+        lst = list(data)
+        if len(lst) == 1:
+            return lst[0]
+        return lst
+
+    # strikethrough plugin
+
+    def strikethrough(self, text):
+        return html.Strike(text)
+
+    # table plugin
+
+    def table(self, text):
+        return html.Table(text)
+
+    def table_head(self, text):
+        return html.Thead(html.Tr(text))
+
+    def table_body(self, text):
+        return html.Tbody(text)
+
+    def table_row(self, text):
+        return html.Tr(text)
+
+    def table_cell(self, text, align=None, is_head=False):
+        style = None
+        if align:
+            style = {"text-align": align}
+        return html.Th(text, style=style) if is_head else html.Td(text, style=style)

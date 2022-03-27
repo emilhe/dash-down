@@ -1,23 +1,24 @@
 from dash_extensions.enrich import DashBlueprint
-from mistletoe import Document
-from dash_down.blocks import ApiDocBlock, DashProxyBlock
-from dash_down.custom_block import bind_custom_blocks
-from dash_down.mantine_renderer import DashMantineRenderer
+from mistune import create_markdown
+from dash_down.directives import ApiDocDirective
 from dash_down.html_renderer import DashHtmlRenderer
+from dash_down.mantine_renderer import DmcRenderer
+from dash_down.plugins import PluginBlueprint
 
 
-def _render_markdown(renderer, md_path: str, custom_blocks=None) -> DashBlueprint:
-    custom_blocks = [ApiDocBlock(), DashProxyBlock()] if custom_blocks is None else custom_blocks
-    with open(md_path, 'r') as f:
-        with renderer() as r:
-            bind_custom_blocks(r, custom_blocks=custom_blocks)
-            blueprint = r.render(Document(f), )
+def _render_markdown(renderer, md_path, plugins=None):
+    default_plugins = ['table', 'strikethrough', PluginBlueprint(), ApiDocDirective()]
+    if plugins is not None:
+        plugins = default_plugins + plugins
+    markdown = create_markdown(renderer=renderer(), plugins=plugins)
+    with open(md_path) as f:
+        blueprint = markdown.parse(f.read())
     return blueprint
 
 
-def md_to_blueprint_html(md_path: str, custom_blocks=None) -> DashBlueprint:
-    return _render_markdown(DashHtmlRenderer, md_path, custom_blocks)
+def md_to_blueprint_html(md_path: str, plugins=None) -> DashBlueprint:
+    return _render_markdown(DashHtmlRenderer, md_path, plugins)
 
 
-def md_to_blueprint_dmc(md_path: str, custom_blocks=None) -> DashBlueprint:
-    return _render_markdown(DashMantineRenderer, md_path, custom_blocks)
+def md_to_blueprint_dmc(md_path: str, plugins=None) -> DashBlueprint:
+    return _render_markdown(DmcRenderer, md_path, plugins)

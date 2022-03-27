@@ -12,7 +12,7 @@
 
 ![Tux, the Linux mascot](assets/lena_color.png)
 
-~~strike through~~, `inline code`, *italic*, **bold**, ***bold and italic***, [link](https://google.com), [link](https://google.com, "link title")
+~~strike through~~, `inline code`, *italic*, **bold**, ***bold and italic***, [link](https://google.com)
 
 > Dorothy followed her through many of the beautiful rooms in her castle.
 
@@ -33,6 +33,9 @@ if __name__ == '__main__':
 unkown code
 ```
 
+Text on one line  
+text on another
+
 1. First item
 2. Second item
 3. Third item
@@ -43,13 +46,16 @@ unkown code
 
 ***
 
-Text on a line
-and text on another link
-
 <p>Hello from <em>html</em> world!</p>
 
 \* Without the backslash, this would be a bullet in an unordered list.
 
-> ApiDoc:dash_extensions.Purify
+| Tables   |      Are      |  Cool |
+|----------|:-------------:|------:|
+| col 1 is |  left-aligned | $1600 |
+| col 2 is |    centered   |   $12 |
+| col 3 is | right-aligned |    $1 |
+
+.. api-doc:: dash_extensions.Purify
 
 > DashProxy:module_name=resources.test,app_name=app

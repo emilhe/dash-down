@@ -1,43 +1,40 @@
 import dash_mantine_components as dmc
-
-from itertools import chain
-from mistletoe.block_token import HTMLBlock
 from dash_down.html_renderer import DashHtmlRenderer
 
 
-class DashMantineRenderer(DashHtmlRenderer):
+class DmcRenderer(DashHtmlRenderer):
     """
     Render markdown into Dash Mantine components.
     """
 
-    def __init__(self, *extras):
-        super().__init__(*chain([HTMLBlock], extras))
-        self._suppress_ptag_stack = [False]
-        self.blueprint = None
+    def text(self, text):
+        return dmc.Text(text)
 
-    # # TODO: Change to dmc.Code
-    # def render_inline_code(self, token):
-    #     return html.Code(self.render_inner(token))
+    def link(self, link, children=None, title=None):
+        return dmc.Anchor(children, href=link)
 
-    def render_image(self, token):
-        return dmc.Image(src=token.src, alt=self.render_to_plain(token), caption=token.title)
+    def image(self, src, alt="", title=None):
+        return dmc.Image(src=src, alt=alt, caption=title)
 
-    def render_heading(self, token):
-        inner = self.render_inner(token)
-        return dmc.Title(inner, order=token.level)
+    def heading(self, children, level):
+        return dmc.Title(children, order=level)
 
-    def render_quote(self, token):
-        self._suppress_ptag_stack.append(False)
-        inner = [self.render(child) for child in token.children]
-        self._suppress_ptag_stack.pop()
-        return dmc.Blockquote(inner)
+    def thematic_break(self):
+        return dmc.Divider()
 
-    def render_paragraph(self, token):
-        if self._suppress_ptag_stack[-1]:
-            return '{}'.format(self.render_inner(token))
-        return dmc.Text(self.render_inner(token))
+    def block_text(self, text):
+        return dmc.Text(text)
 
-    @staticmethod
-    def render_block_code(token):
-        inner = token.children[0].content
-        return dmc.Prism(inner, language=token.language if token.language else "markup")
+    def block_code(self, children, info=None):
+        lang = None
+        if info is not None:
+            info = info.strip()
+        if info:
+            lang = info.split(None, 1)[0]
+        return dmc.Prism(children, language=lang)
+
+    def block_quote(self, text):
+        return dmc.Blockquote(text)
+
+    def table(self, text):
+        return dmc.Table(text, striped=True, highlightOnHover=True)
