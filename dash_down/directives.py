@@ -1,7 +1,7 @@
 import importlib
 import re
 
-from typing import List, Dict
+from typing import List
 from dash import html
 from dash_extensions.enrich import DashProxy, PrefixIdTransform, DashBlueprint
 from mistune.directives import Directive
@@ -49,7 +49,7 @@ class DashDirective(Directive):
         return camel_to_kebab(self.__class__.__name__.replace("Directive", ""))
 
     def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
-        raise NotImplementedError()
+        raise NotImplementedError()  # pragma: no cover
 
 
 class ApiDocDirective(DashDirective):
@@ -106,7 +106,7 @@ class DashProxyDirective(DashDirective):
         module_name = value
         # Parse app name.
         app_name = "app"
-        if "app_name" in options:
+        if "app-name" in options:
             app_name = options[app_name]
         # Get the app.
         module = importlib.import_module(module_name)

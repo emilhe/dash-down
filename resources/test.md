@@ -59,3 +59,4 @@ text on another
 .. api-doc:: dash_extensions.Purify
 
 .. dash-proxy:: resources.test
+   :app-name: app
