@@ -110,10 +110,10 @@ class DashProxyDirective(DashDirective):
         return self._default_renderer(source, layout)
 
     def _default_code_transform(self, source: List[str]):
-        return [line for line in source if self.hide_tag not in line]
+        return "".join([line for line in source if self.hide_tag not in line])
 
     def _default_renderer(self, source, layout):
         return html.Div([
-            self.md.renderer.block_code(source),
+            self.md.renderer.block_code(source, "python"),
             layout
         ])

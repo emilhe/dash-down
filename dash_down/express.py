@@ -14,10 +14,10 @@ def md_to_blueprint(renderer, md_path, plugins=None):
     :param plugins: extra plugins to load
     :return: DashBlueprint
     """
-    default_plugins = ['table', 'strikethrough', PluginBlueprint(), ApiDocDirective(), DashProxyDirective()]
+    all_plugins = ['table', 'strikethrough', PluginBlueprint(), ApiDocDirective(), DashProxyDirective()]
     if plugins is not None:
-        plugins = default_plugins + plugins
-    markdown = create_markdown(renderer=renderer(), plugins=plugins)
+        all_plugins = all_plugins + plugins
+    markdown = create_markdown(renderer=renderer(), plugins=all_plugins)
     with open(md_path) as f:
         blueprint = markdown.parse(f.read())
     return blueprint

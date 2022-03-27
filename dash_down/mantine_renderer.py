@@ -8,6 +8,9 @@ class DmcRenderer(DashHtmlRenderer):
     """
 
     def text(self, text):
+        return text
+
+    def paragraph(self, text):
         return dmc.Text(text)
 
     def link(self, link, children=None, title=None):
