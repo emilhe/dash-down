@@ -1,6 +1,5 @@
 import plotly.express as px
 from box import Box
-
 from dash_extensions.enrich import DashProxy, dcc, DashBlueprint
 from dash_down.directives import DashDirective
 from dash_down.express import md_to_blueprint_dmc
@@ -17,4 +16,4 @@ class GraphDirective(DashDirective):
 blueprint = md_to_blueprint_dmc('resources/custom_directive.md', plugins=[GraphDirective()])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server(port=7777)
+    DashProxy(blueprint=blueprint).run_server()

@@ -1,6 +1,5 @@
 import importlib
 import re
-
 from typing import List
 from dash import html
 from dash_extensions.enrich import DashProxy, PrefixIdTransform, DashBlueprint

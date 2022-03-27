@@ -22,4 +22,4 @@ dpd = DashProxyDirective(custom_render=custom_code_renderer)
 blueprint = md_to_blueprint_dmc('resources/custom_renderer.md', plugins=[pb, dpd])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server(port=9899)
+    DashProxy(blueprint=blueprint).run_server()
