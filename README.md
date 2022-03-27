@@ -61,9 +61,12 @@ The directive name is derived from the class name by dropping `Directive`, and c
        :x: sepal_width
        :y: sepal_length
 
-To render a markdown file using your new, shiny directive, the syntax would be along the line of,
+To render a markdown file using your new, shiny directive, the syntax would be,
 
 ```
+from dash_extensions.enrich import DashProxy
+from dash_down.express import md_to_blueprint_dmc
+
 path_to_your_md_file = "..."
 blueprint = md_to_blueprint_dmc(path_to_your_md_file, plugins=[GraphDirective()])
 
