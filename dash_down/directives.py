@@ -1,27 +1,40 @@
 import importlib
+import re
 
-from typing import List
+from typing import List, Dict
 from dash import html
-from dash_extensions.enrich import DashProxy, PrefixIdTransform
+from dash_extensions.enrich import DashProxy, PrefixIdTransform, DashBlueprint
 from mistune.directives import Directive
 from box import Box
 
+
+# region Utils
+
+# https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
+def camel_to_snake(name):
+    name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+# https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case
+def camel_to_kebab(name):
+    return camel_to_snake(name).replace("_", "-")
+
+
+# endregion
 
 class DashDirective(Directive):
     """
     Class intended to use as base class for Dash component directives. See 'ApiDocDirective' for a simple example.
     """
 
-    def __init__(self, directive, render):
-        super().__init__()
-        self.render = render
-        self.directive = directive
+    def __init__(self):
         self.md = None
 
     def __call__(self, md):
         self.md = md
-        self.register_directive(md, self.directive)
-        md.renderer.register(self.directive, lambda raw: self.render(**raw))
+        self.register_directive(md, self.get_directive_name())
+        md.renderer.register(self.get_directive_name(),
+                             lambda raw: self.render_directive(**raw))
 
     def parse(self, block, m, state):
         value = m.group('value')
@@ -29,7 +42,14 @@ class DashDirective(Directive):
         options = self.parse_options(m)
         options = Box({item[0]: item[1] for item in options})
         blueprint = state.get("blueprint", None)
-        return dict(type=self.directive, raw=dict(value=value, text=text, options=options, blueprint=blueprint))
+        return dict(type=self.get_directive_name(),
+                    raw=dict(value=value, text=text, options=options, blueprint=blueprint))
+
+    def get_directive_name(self):
+        return camel_to_kebab(self.__class__.__name__.replace("Directive", ""))
+
+    def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
+        raise NotImplementedError()
 
 
 class ApiDocDirective(DashDirective):
@@ -42,10 +62,10 @@ class ApiDocDirective(DashDirective):
     """
 
     def __init__(self, custom_render=None):
+        super().__init__()
         self.custom_render = custom_render
-        super().__init__("api-doc", render=self.render_api_doc)
 
-    def render_api_doc(self, value, text, options, blueprint):
+    def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
         # Parse api doc.
         module_name, component_name = ".".join(value.split(".")[:-1]), value.split(".")[-1]
         module = importlib.import_module(module_name)
@@ -77,18 +97,17 @@ class DashProxyDirective(DashDirective):
     """
 
     def __init__(self, custom_render=None, custom_code_transform=None, hide_tag="no-show"):
+        super().__init__()
         self.custom_render = custom_render
         self.custom_code_transform = custom_code_transform
         self.hide_tag = hide_tag
-        super().__init__("dash-proxy", render=self.render_dash_proxy)
 
-    def render_dash_proxy(self, value, text, options, blueprint):
+    def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
         module_name = value
         # Parse app name.
         app_name = "app"
         if "app_name" in options:
             app_name = options[app_name]
-
         # Get the app.
         module = importlib.import_module(module_name)
         app: DashProxy = getattr(module, app_name)

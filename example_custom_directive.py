@@ -1,17 +1,14 @@
 import plotly.express as px
+from box import Box
 
-from dash_extensions.enrich import DashProxy, dcc
+from dash_extensions.enrich import DashProxy, dcc, DashBlueprint
 from dash_down.directives import DashDirective
 from dash_down.express import md_to_blueprint_dmc
 
 
 class GraphDirective(DashDirective):
 
-    def __init__(self):
-        super().__init__("graph", render=self.render_graph)
-
-    @staticmethod
-    def render_graph(value, text, options, blueprint):
+    def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
         df = getattr(px.data, options.dataset)()
         fig = px.scatter(df, x=options.x, y=options.y)
         return dcc.Graph(figure=fig)
