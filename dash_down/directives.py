@@ -4,6 +4,7 @@ from typing import List
 from dash import html
 from dash_extensions.enrich import DashProxy, PrefixIdTransform
 from mistune.directives import Directive
+from box import Box
 
 
 class DashDirective(Directive):
@@ -26,6 +27,7 @@ class DashDirective(Directive):
         value = m.group('value')
         text = self.parse_text(m)
         options = self.parse_options(m)
+        options = Box({item[0]: item[1] for item in options})
         blueprint = state.get("blueprint", None)
         return dict(type=self.directive, raw=dict(value=value, text=text, options=options, blueprint=blueprint))
 

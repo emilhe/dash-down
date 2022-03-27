@@ -58,4 +58,4 @@ text on another
 
 .. api-doc:: dash_extensions.Purify
 
-> DashProxy:module_name=resources.test,app_name=app
+.. dash-proxy:: resources.test
