@@ -11,11 +11,11 @@ Make sure that you have setup [poetry](https://python-poetry.org/). Then run
 
 to install dependencies.
 
-### Running the example
+#### Running the example
 
     poetry run python example.py
 
-### Running the tests
+#### Running the tests
 
     poetry run pytest
 
@@ -31,14 +31,14 @@ Custom content is rendered the markdown [directive syntax extension](https://mis
 
 where the `directive-name` is mandatory, while the `value`, the `options` (specified as key value pairs), and the `text` are optional. 
 
-### What directives are bundled?
+#### What directives are bundled?
 
 Currently, the bundled directives are
 
 * **api-doc** - a directive for rendering api documentation for a component
 * **dash-proxy** - a block for rendering dash apps (including interactivity)
 
-### How to create custom directives?
+#### How to create custom directives?
 
 To create a new directive, simply make a subclass of `DashDirective` and implement the `render_directive` function. Say you want to make a new directive that yields a plot of the `iris` dataset. The code would be along the lines of,
 
@@ -76,14 +76,14 @@ if __name__ == '__main__':
 
 A working example is bundled in the repo (see `example_custom_directive.py`).
 
-### How to customize the layout of the rendered blueprint?
+#### How to customize the layout of the rendered blueprint?
 
 The layout of the blueprint returned by the renderer can be customized by passing a custom layout function to the `PluginBlueprint`. A working example is bundled in the repo (see `example_code_renderer.py`).
 
-### How to customize the markdown rendering itself?
+#### How to customize the markdown rendering itself?
 
 Make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function(s) for any element that you want to change.
 
-### How to customize the way code is rendered with the DashProxyDirective?
+#### How to customize the way code is rendered with the DashProxyDirective?
 
 The `DashProxyDirective` takes optional arguments to customize code rendering. A working example is bundled in the repo (see `example_code_renderer.py`).

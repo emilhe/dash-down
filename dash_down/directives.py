@@ -106,7 +106,7 @@ class DashProxyDirective(DashDirective):
         # Parse app name.
         app_name = "app"
         if "app-name" in options:
-            app_name = options[app_name]
+            app_name = options["app-name"]
         # Get the app.
         module = importlib.import_module(module_name)
         app: DashProxy = getattr(module, app_name)
