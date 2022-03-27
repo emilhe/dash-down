@@ -1,7 +1,7 @@
 [![Unit tests](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml/badge.svg)](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml)
 [![codecov](https://codecov.io/gh/emilhe/dash-down/branch/main/graph/badge.svg?token=kZXx2N1QGY)](https://codecov.io/gh/emilhe/dash-down)
 
-The `dash-down` module provides tools to convert markdown files into a Plotly Dash application.
+The `dash-down` module provides tools to convert markdown files Plotly Dash applications.
 
 ## Getting started
 
@@ -19,53 +19,64 @@ to install dependencies.
 
     poetry run pytest
 
-## Syntax extension(s)
+## Custom content
 
-Custom content is rendered via a **block** markdown syntax extension. A block has the following syntax,
+Custom content is rendered the markdown [directive** syntax extension](https://mistune.readthedocs.io/en/latest/directives.html). A directive has the following syntax,
 
-> BLOCK_NAME:ARG,KEY=VALUE
+    .. directive-name:: directive value
+       :option-key: option value
+       :option-key: option value
+    
+       full featured markdown text here
 
-where `BLOCK_NAME` denotes the name of the custom block, while `ARG` is a block argument, and the (`KEY`,`VALUE`) pair denotes a keyword argument. Any number of arguments/keyword arguments can be specified (separated by `,`). All arguments are passed to the block `render` function.
+where the `directive-name` is mandatory, while the `value`, the `options` (specified as key value pairs), and the `text` are optional. 
 
-### What blocks are bundled?
+### What directives are bundled?
 
-Currently, the bundled blocks are
+Currently, the bundled directives are
 
-* **ApiDocBlock** - a block for rendering api documentation for a component
-* **DashProxyBlock** - a block for rendering dash apps (including interactivity)
+* **api-doc** - a directive for rendering api documentation for a component
+* **dash-proxy** - a block for rendering dash apps (including interactivity)
 
-### How to create custom blocks?
+### How to create custom directives?
 
-To create a new block, make a subclass of `CustomBlock` and implement the `render` function. Say we want to make a new block that yields a plot of the `iris` dataset. The code would be along the lines of,
+To create a new directive, simply make a subclass of `DashDirective` and implement the `render_directive` functions. Now, say we want to make a new directive that yields a plot of the `iris` dataset. The code would be along the lines of,
 
 ```
-class GraphBlock(CustomBlock):
-    def render(self, renderer, dataset_name, x, y):
-        df = getattr(px.data, dataset_name)()
-        fig = px.scatter(df, x=x, y=y)
+class GraphDirective(DashDirective):
+    def render_directive(self, value, text, options, blueprint):
+        df = getattr(px.data, options.dataset)()
+        fig = px.scatter(df, x=options.x, y=options.y)
         return dcc.Graph(figure=fig)
 ```
 
-With this block defined, you could now create a graph similar to [the one in the Dash docs](https://dash.plotly.com/dash-core-components/graph) with the following syntax,
+The directive name is derived from the class name by dropping `Directive`, and converting to kebab-case (or you can override the `get_directive_name` function). With this directive defined, you can now create a graph similar to [the one in the Dash docs](https://dash.plotly.com/dash-core-components/graph) with the following syntax,
 
-> Graph:iris,x=petal_width,y=petal_length
+    .. graph::
+       :dataset: iris
+       :x: sepal_width
+       :y: sepal_length
 
 To render a markdown file using your new, shiny block, the syntax would be along the line of,
 
 ```
 path_to_your_md_file = "..."
-blueprint = md_to_blueprint_dmc(path_to_your_md_file, custom_blocks=[GraphBlock()])
+blueprint = md_to_blueprint_dmc(path_to_your_md_file, plugins=[GraphDirective()])
 
 if __name__ == '__main__':
     DashProxy(blueprint=blueprint).run_server()
 ```
 
-A working example is bundled in the repo (see `example_custom_block.py`).
+A working example is bundled in the repo (see `example_custom_directive.py`).
 
-### How to customize the way code is rendered with the DashProxyBlock?
+### How to customize the layout of the rendered blueprint?
 
-The `DashProxyBlock` takes optional arguments to customize code rendering. A working example is bundled in the repo (see `example_code_renderer.py`).
+The layout of the blueprint returned by the renderer can ce customtized by passing a custom layout function to the `PluginBlueprint`. A working example is bundled in the repo (see `example_code_renderer.py`).
 
 ### How to customize the markdown rendering itself?
 
-Just make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function for any element that you want to change.
+Make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function for any element that you want to change.
+
+### How to customize the way code is rendered with the DashProxyDirective?
+
+The `DashProxyDirective` takes optional arguments to customize code rendering. A working example is bundled in the repo (see `example_code_renderer.py`).

@@ -1,0 +1,1 @@
+.. dash-proxy:: resources.test

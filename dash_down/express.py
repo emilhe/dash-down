@@ -1,23 +1,65 @@
 from dash_extensions.enrich import DashBlueprint
-from mistletoe import Document
-from dash_down.blocks import ApiDocBlock, DashProxyBlock
-from dash_down.custom_block import bind_custom_blocks
-from dash_down.mantine_renderer import DashMantineRenderer
+from mistune import create_markdown
+from dash_down.directives import ApiDocDirective, DashProxyDirective
 from dash_down.html_renderer import DashHtmlRenderer
+from dash_down.mantine_renderer import DmcRenderer
+from dash_down.plugins import PluginBlueprint
+
+_default_plugins_str = ['table', 'strikethrough']
+_default_plugins_class = [PluginBlueprint(), ApiDocDirective(), DashProxyDirective()]
+_default_plugins = _default_plugins_str + _default_plugins_class
 
 
-def _render_markdown(renderer, md_path: str, custom_blocks=None) -> DashBlueprint:
-    custom_blocks = [ApiDocBlock(), DashProxyBlock()] if custom_blocks is None else custom_blocks
-    with open(md_path, 'r') as f:
-        with renderer() as r:
-            bind_custom_blocks(r, custom_blocks=custom_blocks)
-            blueprint = r.render(Document(f), )
+def _resolve_plugins(plugins):
+    if plugins is None:
+        return _default_plugins
+    all_plugins = list(_default_plugins)
+    for plugin in plugins:
+        # String plugins.
+        if isinstance(plugin, str):
+            if plugin not in _default_plugins_str:
+                all_plugins.append(plugin)
+            continue
+        # Class-based plugins.
+        try:
+            class_names = [p.__class__.__name__ for p in all_plugins]
+            match = class_names.index(plugin.__class__.__name__)
+            all_plugins.pop(match)
+        except ValueError:
+            pass
+        all_plugins.append(plugin)
+    return all_plugins
+
+
+def md_to_blueprint(renderer, md_path, plugins=None):
+    """
+    Render a markdown file into a DashBlueprint using the provided renderer class
+    :param renderer: renderer class, e.g. DashHtmlRenderer
+    :param md_path: path to markdown file
+    :param plugins: extra plugins to load
+    :return: DashBlueprint
+    """
+    markdown = create_markdown(renderer=renderer(), plugins=_resolve_plugins(plugins))
+    with open(md_path) as f:
+        blueprint = markdown.parse(f.read())
     return blueprint
 
 
-def md_to_blueprint_html(md_path: str, custom_blocks=None) -> DashBlueprint:
-    return _render_markdown(DashHtmlRenderer, md_path, custom_blocks)
+def md_to_blueprint_html(md_path: str, plugins=None) -> DashBlueprint:
+    """
+    Render a markdown file into a DashBlueprint using html components.
+    :param md_path: path to markdown file
+    :param plugins: extra plugins to load
+    :return: DashBlueprint
+    """
+    return md_to_blueprint(DashHtmlRenderer, md_path, plugins)
 
 
-def md_to_blueprint_dmc(md_path: str, custom_blocks=None) -> DashBlueprint:
-    return _render_markdown(DashMantineRenderer, md_path, custom_blocks)
+def md_to_blueprint_dmc(md_path: str, plugins=None) -> DashBlueprint:
+    """
+    Render a markdown file into a DashBlueprint using dmc components.
+    :param md_path: path to markdown file
+    :param plugins: extra plugins to load
+    :return: DashBlueprint
+    """
+    return md_to_blueprint(DmcRenderer, md_path, plugins)
