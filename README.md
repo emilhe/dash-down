@@ -78,11 +78,11 @@ A working example is bundled in the repo (see `example_custom_directive.py`).
 
 ### How to customize the layout of the rendered blueprint?
 
-The layout of the blueprint returned by the renderer can ce customtized by passing a custom layout function to the `PluginBlueprint`. A working example is bundled in the repo (see `example_code_renderer.py`).
+The layout of the blueprint returned by the renderer can be customized by passing a custom layout function to the `PluginBlueprint`. A working example is bundled in the repo (see `example_code_renderer.py`).
 
 ### How to customize the markdown rendering itself?
 
-Make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function for any element that you want to change.
+Make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function(s) for any element that you want to change.
 
 ### How to customize the way code is rendered with the DashProxyDirective?
 
