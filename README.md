@@ -40,7 +40,7 @@ Currently, the bundled directives are
 
 ### How to create custom directives?
 
-To create a new directive, simply make a subclass of `DashDirective` and implement the `render_directive` function. Now, say we want to make a new directive that yields a plot of the `iris` dataset. The code would be along the lines of,
+To create a new directive, simply make a subclass of `DashDirective` and implement the `render_directive` function. Say you want to make a new directive that yields a plot of the `iris` dataset. The code would be along the lines of,
 
 ```
 class GraphDirective(DashDirective):
