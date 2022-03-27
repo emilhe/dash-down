@@ -43,6 +43,10 @@ Currently, the bundled directives are
 To create a new directive, simply make a subclass of `DashDirective` and implement the `render_directive` function. Say you want to make a new directive that yields a plot of the `iris` dataset. The code would be along the lines of,
 
 ```
+import plotly.express as px
+from dash_down.directives import DashDirective
+from dash_extensions.enrich import dcc
+
 class GraphDirective(DashDirective):
     def render_directive(self, value, text, options, blueprint):
         df = getattr(px.data, options.dataset)()
@@ -57,7 +61,7 @@ The directive name is derived from the class name by dropping `Directive`, and c
        :x: sepal_width
        :y: sepal_length
 
-To render a markdown file using your new, shiny block, the syntax would be along the line of,
+To render a markdown file using your new, shiny directive, the syntax would be along the line of,
 
 ```
 path_to_your_md_file = "..."
