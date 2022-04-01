@@ -39,5 +39,11 @@ class DmcRenderer(DashHtmlRenderer):
     def block_quote(self, text):
         return dmc.Blockquote(text)
 
+    def list(self, children, ordered, level, start=None):
+        return dmc.List(children, type="ordered" if ordered else "unordered")
+
+    def list_item(self, text, level):
+        return dmc.ListItem(text)
+
     def table(self, text):
         return dmc.Table(text, striped=True, highlightOnHover=True)

@@ -7,13 +7,15 @@ from dash_down.plugins import PluginBlueprint
 
 
 def custom_layout(children):
-    return dmc.MantineProvider(dmc.Group(children, direction="column", grow=True), withNormalizeCSS=True, withGlobalStyles=True)
+    return dmc.MantineProvider(dmc.Group(children, direction="column", grow=True),
+                               withNormalizeCSS=True, withGlobalStyles=True)
 
 
-def custom_code_renderer(source, layout):
+def custom_code_renderer(source, layout, caption):
     return dmc.Grid([
         dmc.Col(dmc.Prism("".join(source), language="python"), span=1),
         dmc.Col(layout, span=1),
+        dmc.Col(dmc.Text(caption), span=2),
     ], columns=2)
 
 
@@ -22,4 +24,4 @@ dpd = DashProxyDirective(custom_render=custom_code_renderer)
 blueprint = md_to_blueprint_dmc('resources/custom_renderer.md', plugins=[pb, dpd])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server()
+    DashProxy(blueprint=blueprint).run_server(port=7979)

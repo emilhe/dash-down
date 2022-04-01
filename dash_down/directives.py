@@ -126,7 +126,7 @@ class DashProxyDirective(DashDirective):
                 source = self._default_code_transform(source)
         # Invoke render function.
         if self.custom_render:
-            return self.custom_render(source, layout)
+            return self.custom_render(source, layout, **options)
         return self._default_renderer(source, layout)
 
     def _default_code_transform(self, source: List[str]):
