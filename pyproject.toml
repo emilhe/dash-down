@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "dash-down"
-version = "0.0.5"
+version = "0.0.8"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-dash = "2.3.0"
-dash-extensions = "0.1.0rc3"
+dash = "2.3.1"
+dash-extensions = "0.1.0rc5"
 dash-mantine-components = "^0.7.0"
 dash-iconify = "^0.1.0"
 dash-labs = "^1.0.3"

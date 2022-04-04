@@ -110,10 +110,6 @@ class DashProxyDirective(DashDirective):
         # Get the app.
         module = importlib.import_module(module_name)
         app: DashProxy = getattr(module, app_name)
-        # Add prefix.
-        prefix = module_name.replace(".", "_")
-        prefix_transform = PrefixIdTransform(prefix)  # TODO: Maybe do some escaping?
-        app.blueprint.transforms.append(prefix_transform)
         # Register on blueprint.
         app.blueprint.register_callbacks(blueprint)
         # Extract values for rendering.
