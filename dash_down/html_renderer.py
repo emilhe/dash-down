@@ -8,7 +8,7 @@ class DashHtmlRenderer(AstRenderer):
     Render markdown into Dash HTML components.
     """
 
-    def __init__(self):
+    def __init__(self, add_header_anchors=True):
         super().__init__()
         self.h_level_mapping = {
             1: html.H1,
@@ -18,6 +18,7 @@ class DashHtmlRenderer(AstRenderer):
             5: html.H5,
             6: html.H6
         }
+        self.add_header_anchors = add_header_anchors
         self.blueprint = DashBlueprint()
 
     def text(self, text):
@@ -45,7 +46,7 @@ class DashHtmlRenderer(AstRenderer):
         return html.P(text)
 
     def heading(self, children, level):
-        return self.h_level_mapping[level](children)
+        return self.h_level_mapping[level](self.add_header_anchor(children))
 
     def newline(self):
         return ''
@@ -109,3 +110,13 @@ class DashHtmlRenderer(AstRenderer):
         if align:
             style = {"text-align": align}
         return html.Th(text, style=style) if is_head else html.Td(text, style=style)
+
+    # custom stuff
+
+    def add_header_anchor(self, children):
+        if not self.add_header_anchors:
+            return children
+        string = str(children).lower()
+        anchor = ''.join(e if e.isalnum() else "" if i in [0, len(string) - 1] else "-" for i, e in enumerate(string))
+        icon = html.Span(className="octicon octicon-link")
+        return [html.A(className="anchor", href=f"#{anchor}", id=anchor, children=icon), children]

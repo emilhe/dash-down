@@ -1,5 +1,7 @@
 import dash_mantine_components as dmc
 from dash_down.html_renderer import DashHtmlRenderer
+from dash_iconify import DashIconify
+from dash import html
 
 
 class DmcRenderer(DashHtmlRenderer):
@@ -20,7 +22,7 @@ class DmcRenderer(DashHtmlRenderer):
         return dmc.Image(src=src, alt=alt, caption=title)
 
     def heading(self, children, level):
-        return dmc.Title(children, order=level)
+        return dmc.Title(super().add_header_anchor(children), order=level)
 
     def thematic_break(self):
         return dmc.Divider()

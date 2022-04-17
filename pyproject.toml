@@ -4,9 +4,14 @@ version = "0.0.9"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/emilhe/dash-down"
+repository = "https://github.com/emilhe/dash-down"
+documentation = "https://github.com/emilhe/dash-down"
+keywords = ["dash", "plotly", "markdown", "flask"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.7"
 dash = "2.3.1"
 dash-extensions = "0.1.0rc5"
 dash-mantine-components = "^0.7.0"

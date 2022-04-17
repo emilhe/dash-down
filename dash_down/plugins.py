@@ -8,7 +8,7 @@ class PluginBlueprint:
     """
 
     def __init__(self, layout=None):
-        self.layout = layout if layout is not None else lambda x: html.Div(x)
+        self.layout = layout if layout is not None else lambda x: html.Div(x, className="markdown-body")
 
     def __call__(self, md: Markdown):
         def setup_blueprint(ctx, tokens, state):
