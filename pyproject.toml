@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dash-down"
-version = "0.0.9"
+version = "0.0.11"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"

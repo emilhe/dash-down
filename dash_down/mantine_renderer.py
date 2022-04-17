@@ -1,6 +1,5 @@
 import dash_mantine_components as dmc
 from dash_down.html_renderer import DashHtmlRenderer
-from dash_iconify import DashIconify
 from dash import html
 
 
@@ -13,7 +12,8 @@ class DmcRenderer(DashHtmlRenderer):
         return text
 
     def paragraph(self, text):
-        return dmc.Text(text)
+        # TODO: Use both text and p? Or just one? Some CSS (e.g. github) need the p's.
+        return dmc.Text(html.P(text))
 
     def link(self, link, children=None, title=None):
         return dmc.Anchor(children, href=link)
