@@ -7,8 +7,8 @@ class PluginBlueprint:
     This plugin injects a DashBlueprint as part of the rendering state. It's needed by e.g. the DashProxy directive.
     """
 
-    def __init__(self, layout=None):
-        self.layout = layout if layout is not None else lambda x: html.Div(x, className="markdown-body")
+    def __init__(self, shell=None):
+        self.shell = shell if shell is not None else lambda x: html.Div(x, className="markdown-body")
 
     def __call__(self, md: Markdown):
         def setup_blueprint(ctx, tokens, state):
@@ -17,7 +17,7 @@ class PluginBlueprint:
 
         def collect_blueprint(ctx, result, state):
             blueprint: DashBlueprint = state["blueprint"]
-            blueprint.layout = self.layout(result)
+            blueprint.layout = self.shell(result)
             return blueprint
 
         md.before_parse_hooks.append(setup_blueprint)

@@ -1,6 +1,6 @@
 import importlib
 import re
-from typing import List
+from typing import List, Callable
 from dash import html
 from dash_extensions.enrich import DashProxy, PrefixIdTransform, DashBlueprint
 from mistune.directives import Directive
@@ -13,6 +13,7 @@ from box import Box
 def camel_to_snake(name):
     name = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
 
 # https://stackoverflow.com/questions/11273282/whats-the-name-for-hyphen-separated-case
 def camel_to_kebab(name):
@@ -51,6 +52,19 @@ class DashDirective(Directive):
         raise NotImplementedError()  # pragma: no cover
 
 
+class FunctionDirective(DashDirective):
+    def __init__(self, f: Callable, name=None):
+        super().__init__()
+        self.name = name
+        self.f = f
+
+    def get_directive_name(self):
+        return camel_to_kebab(self.f.__name__) if self.name is None else self.name
+
+    def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
+        return self.f(value, text, options, blueprint)
+
+
 class ApiDocDirective(DashDirective):
     """
     Directive that yields API documentation. The following syntax,
@@ -60,9 +74,9 @@ class ApiDocDirective(DashDirective):
     yields API docs for the 'Purify' component from the 'dash_extensions' module.
     """
 
-    def __init__(self, custom_render=None):
+    def __init__(self, shell=None):
         super().__init__()
-        self.custom_render = custom_render
+        self.shell = shell
 
     def render_directive(self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
         # Parse api doc.
@@ -73,13 +87,13 @@ class ApiDocDirective(DashDirective):
         docs = component_doc.split("Keyword arguments:")[-1]
         docs = docs.lstrip("\n\n")
         # Invoke render function.
-        if self.custom_render:
-            return self.custom_render(docs)
-        return self._default_renderer(docs)
+        if self.shell:
+            return self.shell(docs)
+        return self._default_shell(docs)
 
-    def _default_renderer(self, docs):
+    def _default_shell(self, docs):
         return html.Div([
-            self.md.renderer.heading("Keyword arguments:", 5),
+            self.md.renderer.heading("Keyword arguments:", 4),
             self.md.renderer.block_code(docs, info='git')
         ])
 
@@ -95,9 +109,9 @@ class DashProxyDirective(DashDirective):
     (including callbacks), with the code next to it.
     """
 
-    def __init__(self, custom_render=None, custom_code_transform=None, hide_tag="no-show"):
+    def __init__(self, shell=None, custom_code_transform=None, hide_tag="no-show"):
         super().__init__()
-        self.custom_render = custom_render
+        self.shell = shell
         self.custom_code_transform = custom_code_transform
         self.hide_tag = hide_tag
 
@@ -121,14 +135,14 @@ class DashProxyDirective(DashDirective):
             else:
                 source = self._default_code_transform(source)
         # Invoke render function.
-        if self.custom_render:
-            return self.custom_render(source, layout, **options)
-        return self._default_renderer(source, layout)
+        if self.shell:
+            return self.shell(source, layout, **options)
+        return self._default_shell(source, layout)
 
     def _default_code_transform(self, source: List[str]):
         return "".join([line for line in source if self.hide_tag not in line])
 
-    def _default_renderer(self, source, layout):
+    def _default_shell(self, source, layout):
         return html.Div([
             self.md.renderer.block_code(source, "python"),
             layout

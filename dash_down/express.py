@@ -1,19 +1,28 @@
 from dash_extensions.enrich import DashBlueprint
 from mistune import create_markdown
-from dash_down.directives import ApiDocDirective, DashProxyDirective
+from dash_down.directives import ApiDocDirective, DashProxyDirective, FunctionDirective
 from dash_down.html_renderer import DashHtmlRenderer
 from dash_down.mantine_renderer import DmcRenderer
 from dash_down.plugins import PluginBlueprint
 
 _default_plugins_str = ['table', 'strikethrough']
-_default_plugins_class = [PluginBlueprint(), ApiDocDirective(), DashProxyDirective()]
-_default_plugins = _default_plugins_str + _default_plugins_class
 
 
-def _resolve_plugins(plugins):
+def _default_plugins_class(shell, api_doc_shell, dash_proxy_shell):
+    return [PluginBlueprint(shell=shell), ApiDocDirective(api_doc_shell), DashProxyDirective(shell=dash_proxy_shell)]
+
+
+def _default_plugins(shell, api_doc_shell, dash_proxy_shell):
+    return _default_plugins_str + _default_plugins_class(shell, api_doc_shell, dash_proxy_shell)
+
+
+def _resolve_plugins(plugins, directives, shell=None, api_doc_shell=None, dash_proxy_shell=None):
+    if directives is not None:
+        d_plugins = [FunctionDirective(d) for d in directives]
+        plugins = d_plugins if plugins is None else plugins + d_plugins
     if plugins is None:
-        return _default_plugins
-    all_plugins = list(_default_plugins)
+        return _default_plugins(shell, api_doc_shell, dash_proxy_shell)
+    all_plugins = list(_default_plugins(shell, api_doc_shell, dash_proxy_shell))
     for plugin in plugins:
         # String plugins.
         if isinstance(plugin, str):
@@ -31,35 +40,44 @@ def _resolve_plugins(plugins):
     return all_plugins
 
 
-def md_to_blueprint(renderer, md_path, plugins=None):
+def md_to_blueprint(renderer, md_path, plugins=None, directives=None, shell=None, api_doc_shell=None, dash_proxy_shell=None):
     """
     Render a markdown file into a DashBlueprint using the provided renderer class
     :param renderer: renderer class, e.g. DashHtmlRenderer
     :param md_path: path to markdown file
     :param plugins: extra plugins to load
+    :param shell: shell for the blueprint layout rendering
+    :param api_doc_shell: shell for rendering of api doc directives
+    :param dash_proxy_shell: shell for rendering of dash proxy directives
     :return: DashBlueprint
     """
-    markdown = create_markdown(renderer=renderer(), plugins=_resolve_plugins(plugins))
+    plugins = _resolve_plugins(plugins, directives, shell, api_doc_shell, dash_proxy_shell)
+    markdown = create_markdown(renderer=renderer(), plugins=plugins)
     with open(md_path) as f:
         blueprint = markdown.parse(f.read())
     return blueprint
 
 
-def md_to_blueprint_html(md_path: str, plugins=None) -> DashBlueprint:
+def md_to_blueprint_html(md_path: str, plugins=None, directives=None, shell=None, api_doc_shell=None, dash_proxy_shell=None) -> DashBlueprint:
     """
     Render a markdown file into a DashBlueprint using html components.
     :param md_path: path to markdown file
     :param plugins: extra plugins to load
-    :return: DashBlueprint
+    :param shell: shell for the blueprint layout rendering
+    :param api_doc_shell: shell for rendering of api doc directives
+    :param dash_proxy_shell: shell for rendering of dash proxy directives
     """
-    return md_to_blueprint(DashHtmlRenderer, md_path, plugins)
+    return md_to_blueprint(DashHtmlRenderer, md_path, plugins, directives, shell, api_doc_shell, dash_proxy_shell)
 
 
-def md_to_blueprint_dmc(md_path: str, plugins=None) -> DashBlueprint:
+def md_to_blueprint_dmc(md_path: str, plugins=None, directives=None, shell=None, api_doc_shell=None, dash_proxy_shell=None) -> DashBlueprint:
     """
     Render a markdown file into a DashBlueprint using dmc components.
     :param md_path: path to markdown file
     :param plugins: extra plugins to load
+    :param shell: shell for the blueprint layout rendering
+    :param api_doc_shell: shell for rendering of api doc directives
+    :param dash_proxy_shell: shell for rendering of dash proxy directives
     :return: DashBlueprint
     """
-    return md_to_blueprint(DmcRenderer, md_path, plugins)
+    return md_to_blueprint(DmcRenderer, md_path, plugins, directives, shell, api_doc_shell, dash_proxy_shell)

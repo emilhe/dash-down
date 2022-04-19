@@ -1,19 +1,11 @@
 import dash_mantine_components as dmc
 from dash_down.html_renderer import DashHtmlRenderer
-from dash import html
 
 
 class DmcRenderer(DashHtmlRenderer):
     """
     Render markdown into Dash Mantine components.
     """
-
-    def text(self, text):
-        return text
-
-    def paragraph(self, text):
-        # TODO: Use both text and p? Or just one? Some CSS (e.g. github) need the p's.
-        return dmc.Text(html.P(text))
 
     def link(self, link, children=None, title=None):
         return dmc.Anchor(children, href=link)
@@ -26,9 +18,6 @@ class DmcRenderer(DashHtmlRenderer):
 
     def thematic_break(self):
         return dmc.Divider()
-
-    def block_text(self, text):
-        return dmc.Text(text)
 
     def block_code(self, children, info=None):
         lang = None
