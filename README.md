@@ -88,7 +88,7 @@ A working example is bundled in the repo (see `example_custom_directive.py`).
 
 The layout of the blueprint returned by the renderer can be customized by passing a custom app sheel via the `shell` keyword of the `md_to_blueprint_dmc` function. A working example is bundled in the repo (see `example_code_renderer.py`).
 
-Per default, the app shell is a `Div` element with `className=markdown-body`. This class makes it possibly to use GitHub CSS for styling.
+Per default, the app shell is a `Div` element with `className="markdown-body"`. This class makes it possibly to use GitHub CSS for styling.
 
 #### How to customize the way code is rendered with the DashProxyDirective?
 
