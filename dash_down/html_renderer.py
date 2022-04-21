@@ -118,5 +118,6 @@ class DashHtmlRenderer(AstRenderer):
             return children
         string = str(children).lower()
         anchor = ''.join(e if e.isalnum() else "" if i in [0, len(string) - 1] else "-" for i, e in enumerate(string))
+        anchor = f'a-{anchor}'  # add anchor prefix
         icon = html.Span(className="octicon octicon-link")
         return [html.A(className="anchor", href=f"#{anchor}", id=anchor, children=icon), children]

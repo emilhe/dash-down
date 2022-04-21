@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dash-down"
-version = "0.0.13rc3"
+version = "0.0.13rc7"
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"
@@ -11,12 +11,11 @@ documentation = "https://github.com/emilhe/dash-down"
 keywords = ["dash", "plotly", "markdown", "flask"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = ">=3.7"
 dash = "2.3.1"
-dash-extensions = "0.1.0rc5"
+dash-extensions = "0.1.0rc10"
 dash-mantine-components = "^0.7.0"
 dash-iconify = "^0.1.0"
-dash-labs = "^1.0.3"
 mistune = "^2.0.2"
 python-box = "^6.0.1"
 
@@ -25,7 +24,8 @@ coverage = "^6.3.2"
 pytest = "^7.1.1"
 dash = {extras = ["dev", "testing"], version = "^2.3.0"}
 pytest-cov = "^3.0.0"
-pandas = "^1.4.1"
+pandas = ">=1.1.5"
+dash-labs = "^1.0.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -1,6 +1,6 @@
 import dash_mantine_components as dmc
 from dash_extensions.enrich import DashProxy
-from dash_down.express import md_to_blueprint_dmc
+from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
 
 
 def blueprint_shell(children):
@@ -19,6 +19,7 @@ def dash_proxy_shell(source, layout, caption):
 blueprint = md_to_blueprint_dmc('resources/custom_renderer.md',
                                 shell=blueprint_shell,
                                 dash_proxy_shell=dash_proxy_shell)
+app = DashProxy(blueprint=blueprint, external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server(port=7979)
+    app.run_server(port=7979)

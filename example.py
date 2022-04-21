@@ -1,7 +1,8 @@
 from dash_extensions.enrich import DashProxy
-from dash_down.express import md_to_blueprint_dmc
+from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
 
 blueprint = md_to_blueprint_dmc('resources/test.md')
+app = DashProxy(blueprint=blueprint, external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server(port=9657)
+    app.run_server(port=9657)
