@@ -43,6 +43,9 @@ Currently, the bundled directives are
 The easiest way to create a custom directive is to create a function with the following signature,
 
 ```python
+from box import Box
+from dash_extensions.enrich import DashBlueprint
+
 def directive_name(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
     """
     :param value: the directive value (optional)
@@ -56,7 +59,11 @@ def directive_name(value: str, text: str, options: Box[str, str], blueprint: Das
 
 Say, we want to make a new directive that yields a plot of the `iris` dataset. The code would then be along the lines of,
 
-```
+```python
+import plotly.express as px
+from box import Box
+from dash_extensions.enrich import dcc, DashBlueprint
+
 def graph(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
     df = getattr(px.data, options.dataset)()
     fig = px.scatter(df, x=options.x, y=options.y)
@@ -71,22 +78,25 @@ With this directive defined, it is now possible to create a graph similar to [th
        :y: sepal_length
 
 To render a markdown file using the new, shiny directive, the syntax would be,
-```
-from dash_extensions.enrich import DashProxy
-from dash_down.express import md_to_blueprint_dmc
 
-path_to_your_md_file = "..."
-blueprint = md_to_blueprint_dmc(path_to_your_md_file, directives=[graph])
+```python
+from dash_extensions.enrich import DashProxy
+from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
+
+...
+
+blueprint = md_to_blueprint_dmc('path_to_your_md_file', directives=[graph])
+app = DashProxy(blueprint=blueprint, external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
 
 if __name__ == '__main__':
-    DashProxy(blueprint=blueprint).run_server()
+    app.run_server()
 ```
 
 A working example is bundled in the repo (see `example_custom_directive.py`).
 
 #### How to customize the layout of the rendered blueprint?
 
-The layout of the blueprint returned by the renderer can be customized by passing a custom app sheel via the `shell` keyword of the `md_to_blueprint_dmc` function. A working example is bundled in the repo (see `example_code_renderer.py`).
+The layout of the blueprint returned by the renderer can be customized by passing a custom app shell via the `shell` keyword of the `md_to_blueprint_dmc` function. A working example is bundled in the repo (see `example_code_renderer.py`).
 
 Per default, the app shell is a `Div` element with `className="markdown-body"`. This class makes it possibly to use GitHub CSS for styling.
 
