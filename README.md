@@ -1,7 +1,7 @@
 [![Unit tests](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml/badge.svg)](https://github.com/emilhe/dash-down/actions/workflows/python-test.yml)
 [![codecov](https://codecov.io/gh/emilhe/dash-down/branch/main/graph/badge.svg?token=kZXx2N1QGY)](https://codecov.io/gh/emilhe/dash-down)
 
-The `dash-down` module provides tooling to convert markdown files into Plotly Dash applications. 
+The `dash-down` package provides tools to render markdown files into Plotly Dash component trees. Besides standard markdown syntax, a custom interpretation of the [directive syntax extension](https://mistune.readthedocs.io/en/latest/directives.html) makes it possible to embed Dash code blocks and/or applications (including callbacks). For a live demo, please take look at the [`dash-extensions` documentation](https://www.dash-extensions.com/getting-started/installation#a-example).
 
 ## Getting started
 
@@ -36,7 +36,7 @@ where the `directive-name` is mandatory, while the `value`, the `options` (speci
 Currently, the bundled directives are
 
 * **api-doc** - a directive for rendering api documentation for a component
-* **dash-proxy** - a block for rendering dash apps (including interactivity)
+* **dash-proxy** - a directive for rendering dash apps (including interactivity)
 
 #### How to create custom directives?
 
