@@ -120,10 +120,13 @@ class DashProxyDirective(DashDirective):
         # Parse app name.
         app_name = "app"
         if "app-name" in options:
-            app_name = options["app-name"]
+            app_name = options.pop("app-name")
         # Get the app.
         module = importlib.import_module(module_name)
         app: DashProxy = getattr(module, app_name)
+        # Add (optional) prefix.
+        if "prefix" in options:
+            app.blueprint.transforms.append(PrefixIdTransform(prefix=options.pop("prefix")))
         # Register on blueprint.
         app.blueprint.register_callbacks(blueprint)
         # Extract values for rendering.
