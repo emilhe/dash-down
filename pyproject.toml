@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dash-down"
-version = "0.1.3"
+version = "0.1.3
 description = ""
 authors = ["emher <emil.h.eriksen@gmail.com>"]
 license = "MIT"
@@ -13,7 +13,7 @@ keywords = ["dash", "plotly", "markdown", "flask"]
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 dash = ">=2.18.2"
-dash-extensions = ">=1.0.18"
+dash-extensions = ">=1.0.19"
 dash-mantine-components = ">=0.14.11"
 dash-iconify = "^0.1.2"
 mistune = "2.0.4"
@@ -24,7 +24,7 @@ dataclass-wizard = "^0.30.1"
 coverage = "^7.6.8"
 pytest = "^8.3.3"
 dash = {extras = ["dev", "testing"], version = ">=2.18.2"}
-pytest-cov = "^3.0.0"
+pytest-cov = "^6.0.0"
 pandas = ">=2.2.3"
 
 [build-system]
