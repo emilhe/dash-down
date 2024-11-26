@@ -85,7 +85,7 @@ from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
 
 ...
 
-blueprint = md_to_blueprint_dmc('path_to_your_md_file', directives=[graph])
+blueprint = md_to_blueprint_html('path_to_your_md_file', directives=[graph])
 app = DashProxy(blueprint=blueprint, external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
 
 if __name__ == '__main__':
@@ -96,13 +96,13 @@ A working example is bundled in the repo (see `example_custom_directive.py`).
 
 #### How to customize the layout of the rendered blueprint?
 
-The layout of the blueprint returned by the renderer can be customized by passing a custom app shell via the `shell` keyword of the `md_to_blueprint_dmc` function. A working example is bundled in the repo (see `example_code_renderer.py`).
+The layout of the blueprint returned by the renderer can be customized by passing a custom app shell via the `shell` keyword of the `md_to_blueprint_html` function. A working example is bundled in the repo (see `example_code_renderer.py`).
 
-Per default, the app shell is a `Div` element with `className="markdown-body"`. This class makes it possibly to use GitHub CSS for styling.
+Per default, the app shell is a `Div` element with `className="markdown-body"`. This class makes it possible to use GitHub CSS for styling.
 
 #### How to customize the way code is rendered with the DashProxyDirective?
 
-The layout of the Dash apps rendered via the `DashProxyDirective` can be customized via the `dash_proxy_shell` keyword of the `md_to_blueprint_dmc` function. A working example is bundled in the repo (see `example_code_renderer.py`).
+The layout of the Dash apps rendered via the `DashProxyDirective` can be customized via the `dash_proxy_shell` keyword of the `md_to_blueprint_html` function. A working example is bundled in the repo (see `example_code_renderer.py`).
 
 Per default, the app shell `Div` element with the code rendered as the first child and the resulting app rendered as the second.
 

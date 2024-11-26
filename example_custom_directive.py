@@ -1,10 +1,10 @@
 import plotly.express as px
 from box import Box
 from dash_extensions.enrich import DashProxy, dcc, DashBlueprint
-from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
+from dash_down.express import GITHUB_MARKDOWN_CSS_LIGHT, md_to_blueprint_html
 
 
-def graph(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
+def graph(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):  # type: ignore
     """
     :param value: the directive value (optional)
     :param text: the markdown text (optional)
@@ -17,8 +17,8 @@ def graph(value: str, text: str, options: Box[str, str], blueprint: DashBlueprin
     return dcc.Graph(figure=fig)
 
 
-blueprint = md_to_blueprint_dmc('resources/custom_directive.md', directives=[graph])
+blueprint = md_to_blueprint_html("resources/custom_directive.md", directives=[graph])
 app = DashProxy(blueprint=blueprint, external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run_server(port=7885)

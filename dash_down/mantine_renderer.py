@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+
 from dash_down.html_renderer import DashHtmlRenderer
 
 
@@ -11,7 +12,8 @@ class DmcRenderer(DashHtmlRenderer):
         return dmc.Anchor(children, href=link)
 
     def image(self, src, alt="", title=None):
-        return dmc.Image(src=src, alt=alt, caption=title)
+        # TODO: Should we add a caption?
+        return dmc.Image(src=src, alt=alt)  # , caption=title)
 
     def heading(self, children, level):
         return dmc.Title(super().add_header_anchor(children), order=level)
@@ -25,7 +27,7 @@ class DmcRenderer(DashHtmlRenderer):
             info = info.strip()
         if info:
             lang = info.split(None, 1)[0]
-        return dmc.Prism(children, language=lang)
+        return dmc.CodeHighlight(children, language=lang)
 
     def block_quote(self, text):
         return dmc.Blockquote(text)
