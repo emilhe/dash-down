@@ -11,13 +11,24 @@ Make sure that you have setup [poetry](https://python-poetry.org/). Then run
 
 to install dependencies.
 
-#### Running the example
+#### Running the examples
 
     poetry run python example.py
+    poetry run python example_inline.py
+    poetry run python example_custom_directive.py
+    poetry run python example_custom_code_renderer.py
 
 #### Running the tests
 
     poetry run pytest
+
+## Inline content
+
+In addition to rendering markdown from files, you can also render inline markdown,
+
+    md_to_blueprint_html(md="# This is a heading").embed(app)
+
+A complete example can be found in `example_inline.py`.
 
 ## Custom content
 
