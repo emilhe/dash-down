@@ -1,11 +1,10 @@
 import importlib
 import re
-from typing import List, Callable
-from dash import html
-from dash_extensions.enrich import DashProxy, PrefixIdTransform, DashBlueprint
-from mistune.directives import Directive
-from box import Box
+from typing import Callable, List
 
+from dash import html
+from dash_extensions.enrich import DashBlueprint, DashProxy, PrefixIdTransform
+from mistune.directives import Directive
 
 # region Utils
 
@@ -39,11 +38,11 @@ class DashDirective(Directive):
             self.get_directive_name(), lambda raw: self.render_directive(**raw)
         )
 
-    def parse(self, block, m, state):
+    def parse(self, block, m, state: dict):
         value = m.group("value")
         text = self.parse_text(m)
         options = self.parse_options(m)
-        options = Box({item[0]: item[1] for item in options})
+        options = {item[0]: item[1] for item in options}
         blueprint = state.get("blueprint", None)
         return dict(
             type=self.get_directive_name(),
@@ -54,7 +53,7 @@ class DashDirective(Directive):
         return camel_to_kebab(self.__class__.__name__.replace("Directive", ""))
 
     def render_directive(
-        self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint
+        self, value: str, text: str, options: dict[str, str], blueprint: DashBlueprint
     ):
         raise NotImplementedError()  # pragma: no cover
 
@@ -69,7 +68,7 @@ class FunctionDirective(DashDirective):
         return camel_to_kebab(self.f.__name__) if self.name is None else self.name
 
     def render_directive(
-        self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint
+        self, value: str, text: str, options: dict[str, str], blueprint: DashBlueprint
     ):
         return self.f(value, text, options, blueprint)
 
@@ -88,7 +87,7 @@ class ApiDocDirective(DashDirective):
         self.shell = shell
 
     def render_directive(
-        self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint
+        self, value: str, text: str, options: dict[str, str], blueprint: DashBlueprint
     ):
         # Parse api doc.
         module_name, component_name = (
@@ -132,7 +131,7 @@ class DashProxyDirective(DashDirective):
         self.hide_tag = hide_tag
 
     def render_directive(
-        self, value: str, text: str, options: Box[str, str], blueprint: DashBlueprint
+        self, value: str, text: str, options: dict[str, str], blueprint: DashBlueprint
     ):
         module_name = value
         # Parse app name.

@@ -1,7 +1,10 @@
 import dash_mantine_components as dmc
-from dash_extensions.enrich import DashProxy
-from dash_down.express import md_to_blueprint_dmc, GITHUB_MARKDOWN_CSS_LIGHT
 from dash import _dash_renderer
+from dash_extensions.enrich import DashProxy
+
+from dash_down.express import md_to_blueprint_dmc
+
+_dash_renderer._set_react_version("18.2.0")
 
 
 def blueprint_shell(children):
@@ -25,7 +28,7 @@ blueprint = md_to_blueprint_dmc(
     shell=blueprint_shell,
     dash_proxy_shell=dash_proxy_shell,
 )
-app = DashProxy(external_stylesheets=[GITHUB_MARKDOWN_CSS_LIGHT])
+app = DashProxy()
 app.layout = dmc.MantineProvider(blueprint.embed(app))
 
 if __name__ == "__main__":

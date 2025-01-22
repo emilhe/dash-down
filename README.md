@@ -54,14 +54,13 @@ Currently, the bundled directives are
 The easiest way to create a custom directive is to create a function with the following signature,
 
 ```python
-from box import Box
 from dash_extensions.enrich import DashBlueprint
 
-def directive_name(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
+def directive_name(value: str, text: str, options: dict[str, str], blueprint: DashBlueprint):
     """
     :param value: the directive value (optional)
     :param text: the markdown text (optional)
-    :param options: a Box object containing all key value pairs (optional)
+    :param options: a dict containing all key value pairs (optional)
     :param blueprint: the DashBlueprint of the resulting Dash component tree, used e.g. for callback registration
     :return: a Dash component
     """
@@ -72,10 +71,9 @@ Say, we want to make a new directive that yields a plot of the `iris` dataset. T
 
 ```python
 import plotly.express as px
-from box import Box
 from dash_extensions.enrich import dcc, DashBlueprint
 
-def graph(value: str, text: str, options: Box[str, str], blueprint: DashBlueprint):
+def graph(value: str, text: str, options: dict[str, str], blueprint: DashBlueprint):
     df = getattr(px.data, options.dataset)()
     fig = px.scatter(df, x=options.x, y=options.y)
     return dcc.Graph(figure=fig)
@@ -120,3 +118,13 @@ Per default, the app shell `Div` element with the code rendered as the first chi
 #### How to customize the markdown rendering itself?
 
 Make a subclass of `DashMantineRenderer` (or `DashHtmlRenderer`, if you prefer to start from raw HTML) and override the render function(s) for any element that you want to change. A good place to start would be to look at the `DashMantineRenderer` class itself for inspiration.
+
+#### How to style the rendered markdown?
+
+The bundled renderers ( `DashHtmlRenderer`, `DashMantineRenderer`) add CSS classes to the rendered elements with the following naming structure,
+
+```
+m2d-{DIRECTIVE NAME}
+```
+
+Hence, you can target all paragraphs via the `m2d-paragraph` class, or all bold text via the `m2d-strong` class.

@@ -1,14 +1,10 @@
 from dash_extensions.enrich import DashBlueprint
 from mistune import create_markdown
+
 from dash_down.directives import ApiDocDirective, DashProxyDirective, FunctionDirective
 from dash_down.html_renderer import DashHtmlRenderer
 from dash_down.mantine_renderer import DmcRenderer
 from dash_down.plugins import PluginBlueprint
-from dash_down import (
-    GITHUB_MARKDOWN_CSS,
-    GITHUB_MARKDOWN_CSS_DARK,
-    GITHUB_MARKDOWN_CSS_LIGHT,
-)  # noqa: F401
 
 _default_plugins_str = ["table", "strikethrough"]
 

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - UNRELEASED
+
+### Added
+
+- Add (custom) m2d CSS classes to all elements (inspired by markdown2dash)
+
+### Removed
+
+- Removed all dependency on Python box library (dependency reduction)
+- Removed references to CSS files from GITHUB
+
+### Changed
+
+- Updated dependencies, except for `mistune` (migration to v3 postponed due to breaking API changes)
+
 ## [0.1.4] - 26-11-24
 
 ### Changed
