@@ -2,7 +2,7 @@ import inspect
 from functools import wraps
 
 """
-
+Util functions for generating / adding m2d class names to components.
 """
 
 

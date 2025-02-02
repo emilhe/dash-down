@@ -1,3 +1,4 @@
+from dash import html
 from dash_extensions.enrich import DashBlueprint
 from mistune import Markdown
 
@@ -8,7 +9,7 @@ class PluginBlueprint:
     """
 
     def __init__(self, shell=None):
-        self.shell = shell
+        self.shell = shell if shell is not None else lambda x: html.Div(x)
 
     def __call__(self, md: Markdown):
         def setup_blueprint(ctx, tokens, state):
