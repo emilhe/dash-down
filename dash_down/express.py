@@ -18,14 +18,10 @@ def _default_plugins_class(shell, api_doc_shell, dash_proxy_shell):
 
 
 def _default_plugins(shell, api_doc_shell, dash_proxy_shell):
-    return _default_plugins_str + _default_plugins_class(
-        shell, api_doc_shell, dash_proxy_shell
-    )
+    return _default_plugins_str + _default_plugins_class(shell, api_doc_shell, dash_proxy_shell)
 
 
-def _resolve_plugins(
-    plugins, directives=None, shell=None, api_doc_shell=None, dash_proxy_shell=None
-):
+def _resolve_plugins(plugins, directives=None, shell=None, api_doc_shell=None, dash_proxy_shell=None):
     if directives is not None:
         d_plugins = [FunctionDirective(d) for d in directives]
         plugins = d_plugins if plugins is None else plugins + d_plugins
@@ -70,9 +66,7 @@ def md_to_blueprint(
     :param md: raw markdown string (alternative to file path)
     :return: DashBlueprint
     """
-    plugins = _resolve_plugins(
-        plugins, directives, shell, api_doc_shell, dash_proxy_shell
-    )
+    plugins = _resolve_plugins(plugins, directives, shell, api_doc_shell, dash_proxy_shell)
     markdown = create_markdown(renderer=renderer(), plugins=plugins)
     if md_path is not None:
         with open(md_path) as f:
