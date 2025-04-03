@@ -1,6 +1,6 @@
 [project]
 name = "dash-down"
-version = "0.2.0rc4"
+version = "0.2.0"
 description = "Render markdown as Plotly Dash components."
 authors = [
     { name = "emher", email = "emil.h.eriksen@gmail.com" },

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.2.0] - UNRELEASED
+## [0.2.0] - 03-04-25
 
 ### Added
 
@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Updated to Dash 3
 - Change build system to uv
 - Updated dependencies, except for `mistune` (migration to v3 postponed due to breaking API changes)
+- Change code highlighting from using `Prism` to `CodeHighlight`, thereby fixing [#2](https://github.com/emilhe/dash-down/issues/2)
 
 ## [0.1.4] - 26-11-24
 
