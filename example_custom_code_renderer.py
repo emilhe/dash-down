@@ -1,10 +1,7 @@
 import dash_mantine_components as dmc
-from dash import _dash_renderer
 from dash_extensions.enrich import DashProxy
 
 from dash_down.express import md_to_blueprint_dmc
-
-_dash_renderer._set_react_version("18.2.0")
 
 
 def blueprint_shell(children):
@@ -22,7 +19,6 @@ def dash_proxy_shell(source, layout, caption):
     )
 
 
-_dash_renderer._set_react_version("18.2.0")
 blueprint = md_to_blueprint_dmc(
     "resources/custom_renderer.md",
     shell=blueprint_shell,
@@ -32,4 +28,4 @@ app = DashProxy()
 app.layout = dmc.MantineProvider(blueprint.embed(app))
 
 if __name__ == "__main__":
-    app.run_server(port=7979)
+    app.run(port=7979)

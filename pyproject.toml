@@ -13,8 +13,8 @@ dependencies = [
     "dash-extensions>=2.0.0",
     "dash-mantine-components>=1.0.0",
     "dash-iconify>=0.1.2",
-    "mistune=2.0.4",
-    "dataclass-wizard>=^0.30.1"
+    "mistune==2.0.4",
+    "dataclass-wizard>=0.30.1"
 ]
 
 [project.urls]

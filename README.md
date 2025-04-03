@@ -5,22 +5,22 @@ The `dash-down` package provides tools to render markdown files into Plotly Dash
 
 ## Getting started
 
-Make sure that you have setup [poetry](https://python-poetry.org/). Then run
+Make sure that you have setup [uv](https://docs.astral.sh/uv/). Then run
 
-    poetry install
+    uv venv && source .venv/bin/activate && uv sync --all-extras --dev
 
-to install dependencies.
+to create a new virtual environment with all dependencies installed.
 
 #### Running the examples
 
-    poetry run python example.py
-    poetry run python example_inline.py
-    poetry run python example_custom_directive.py
-    poetry run python example_custom_code_renderer.py
+    uv run python example.py
+    uv run python example_inline.py
+    uv run python example_custom_directive.py
+    uv run python example_custom_code_renderer.py
 
 #### Running the tests
 
-    poetry run pytest
+    uv run pytest
 
 ## Inline content
 
@@ -37,17 +37,17 @@ Custom content is rendered via the markdown [directive syntax extension](https:/
     .. directive-name:: directive value
        :option-key: option value
        :option-key: option value
-    
+
        full featured markdown text here
 
-where the `directive-name` is mandatory, while the `value`, the `options` (specified as key value pairs), and the `text` are optional. 
+where the `directive-name` is mandatory, while the `value`, the `options` (specified as key value pairs), and the `text` are optional.
 
 #### What directives are bundled?
 
 Currently, the bundled directives are
 
-* **api-doc** - a directive for rendering api documentation for a component
-* **dash-proxy** - a directive for rendering dash apps (including interactivity)
+- **api-doc** - a directive for rendering api documentation for a component
+- **dash-proxy** - a directive for rendering dash apps (including interactivity)
 
 #### How to create custom directives?
 
@@ -98,7 +98,7 @@ blueprint = md_to_blueprint_html('path_to_your_md_file', directives=[graph])
 app = DashProxy(blueprint=blueprint)
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run()
 ```
 
 A working example is bundled in the repo (see `example_custom_directive.py`).
