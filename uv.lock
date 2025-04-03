@@ -278,7 +278,7 @@ testing = [
 [[package]]
 name = "dash-down"
 version = "0.2.0rc4"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "dash" },
     { name = "dash-extensions" },

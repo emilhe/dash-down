@@ -1,16 +1,16 @@
-from dash_down.express import md_to_blueprint_html, md_to_blueprint_dmc, _resolve_plugins
+from dash_down.express import _resolve_plugins, md_to_blueprint_dmc, md_to_blueprint_html
 
 # TODO: Maybe add UI validation, e.g. using Percy
 from dash_down.plugins import PluginBlueprint
 
 
 def test_render_markdown_html():
-    blueprint = md_to_blueprint_html('resources/test.md', plugins=[])
+    blueprint = md_to_blueprint_html("resources/test.md", plugins=[])
 
 
 # TODO: Maybe add UI validation, e.g. using Percy
 def test_render_markdown_dmc():
-    blueprint = md_to_blueprint_dmc('resources/test.md')
+    blueprint = md_to_blueprint_dmc("resources/test.md")
 
 
 def test_resolve_plugins():

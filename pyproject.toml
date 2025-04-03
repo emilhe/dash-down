@@ -38,3 +38,11 @@ default-groups = [
 [tool.ruff]
 line-length = 120
 target-version = "py313"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dash_down"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
