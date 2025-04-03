@@ -1,8 +1,6 @@
 import os
+import sys
 
-import pytest
-
-
-@pytest.fixture(autouse=True)
-def change_test_dir(request, monkeypatch):
-    monkeypatch.chdir(os.path.join(request.fspath.dirname, ".."))
+test_dir = os.path.join(os.path.dirname(__file__), "..")
+if test_dir not in sys.path:
+    sys.path.insert(0, test_dir)
