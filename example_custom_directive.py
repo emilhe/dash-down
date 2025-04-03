@@ -21,4 +21,4 @@ blueprint = md_to_blueprint_html("resources/custom_directive.md", directives=[gr
 app = DashProxy(blueprint=blueprint)
 
 if __name__ == "__main__":
-    app.run_server(port=7885)
+    app.run(port=7885)

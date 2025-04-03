@@ -1,31 +1,48 @@
-[tool.poetry]
+[project]
 name = "dash-down"
-version = "0.2.0rc2"
-description = ""
-authors = ["emher <emil.h.eriksen@gmail.com>"]
+version = "0.2.0rc4"
+description = "Render markdown as Plotly Dash components."
+authors = [
+    { name = "emher", email = "emil.h.eriksen@gmail.com" },
+]
 license = "MIT"
 readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "dash>=3.0.0",
+    "dash-extensions>=2.0.0",
+    "dash-mantine-components>=1.0.0",
+    "dash-iconify>=0.1.2",
+    "mistune==2.0.4",
+    "dataclass-wizard>=0.30.1"
+]
+
+[project.urls]
 homepage = "https://github.com/emilhe/dash-down"
 repository = "https://github.com/emilhe/dash-down"
-documentation = "https://github.com/emilhe/dash-down"
-keywords = ["dash", "plotly", "markdown", "flask"]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<4.0"
-dash = ">=2.18.2"
-dash-extensions = ">=1.0.19"
-dash-mantine-components = "^0.15.1"
-dash-iconify = "^0.1.2"
-mistune = "2.0.4"
-dataclass-wizard = "^0.30.1"
+[dependency-groups]
+dev = [
+    "dash[dev, testing]>=3.0.0",
+    "pytest-cov>=6.0.0",
+    "pandas>=2.2.3",
+    "ruff>=0.11.0",
+    "wheel>=0.45.1"
+]
 
-[tool.poetry.dev-dependencies]
-coverage = "^7.6.8"
-pytest = "^8.3.3"
-dash = {extras = ["dev", "testing"], version = ">=2.18.2"}
-pytest-cov = "^6.0.0"
-pandas = ">=2.2.3"
+[tool.uv]
+default-groups = [
+    "dev",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dash_down"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
